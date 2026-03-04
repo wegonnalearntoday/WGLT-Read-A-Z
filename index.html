@@ -1,12 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Learning for Kids</title>
   </head>
+
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 960px; height: 600px; background: #231F20"></canvas>
+    <canvas id="unity-canvas" width="960" height="600" tabindex="-1"
+      style="width: 960px; height: 600px; background: #231F20"></canvas>
+
     <script src="Build/Web Read A-Z.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -24,7 +27,9 @@
         document.body.style.textAlign = "left";
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+      var canvasEl = document.querySelector("#unity-canvas");
+
+      createUnityInstance(canvasEl, {
         dataUrl: "Build/Web Read A-Z.data",
         frameworkUrl: "Build/Web Read A-Z.framework.js",
         codeUrl: "Build/Web Read A-Z.wasm",
@@ -32,8 +37,18 @@
         companyName: "WGLT",
         productName: "Learning for Kids",
         productVersion: "1.0",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        // matchWebGLToCanvasSize: false,
+        // devicePixelRatio: 1,
+      }).then((unityInstance) => {
+
+        // ✅ Notify Wix the game is ready
+        if (window.parent) {
+          window.parent.postMessage({ type: "WGLT_READY" }, "*");
+        }
+
+      }).catch((message) => {
+        // Optional: still alert for debugging
+        alert(message);
       });
     </script>
   </body>
